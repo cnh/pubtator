@@ -1,3 +1,4 @@
+import os
 import requests
 import re
 import traceback
@@ -19,7 +20,7 @@ args = parser.parse_args()
 
 #constructing the pubtator api endpoint to be called
 PUBTATOR_ENDPOINT_URL = "https://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/RESTful/tmTool.cgi/Gene/"
-final_api_string = PUBTATOR_ENDPOINT_URL + args.pmid + "/BioC"
+final_api_string = PUBTATOR_ENDPOINT_URL + str(args.pmid) + "/BioC"
 
 #call the pubtator api endpoint
 pubtator_response = requests.get(final_api_string)
@@ -51,11 +52,41 @@ print(pubtator_response.encoding)
 print(pubtator_response.content)
 
 #save requests's response(xml/json) to a file
-filename = "path/to/desired/location/for/saving/response"
-with open(filename, mode='wb') as localfile:     
+
+#before saving pubtator api call response to file, print pwd
+print("\n pwd = " + os.getcwd())
+
+#filename = "path/to/desired/location/for/saving/response"
+api_response_file_path = os.getcwd + "/" + str(args.pmid) + "_bioc.xml"
+
+with open(api_response_file_path, mode='wb') as localfile:     
 	localfile.write(pubtator_response.content)
 
 #search for gene2, gene2 in the api response(which is requests's response)
+
+#can we use simple string method find()
+prsc =  str(pubtator_response.content)
+
+#g1e = gene1 existence in (paper with) given pmid
+g1e = prsc.find(gene1)
+g2e = prsc.find(gene2)
+
+if g1e != -1:
+	print("gene1: " + args.gene1 + " EXISTS in paper with pubmedid: " + str(args.pmid))
+	#consider having 2 output parameters ? #todo
+	#return(True) 
+else:
+	print("gene1: " + args.gene1 + " DOES NOT EXIST in paper with pubmedid: " + str(args.pmid))
+
+
+if g2e != -1:
+	print("gene2: " + args.gene2 + " EXISTS in paper with pubmedid: " + str(args.pmid))
+	#consider having 2 output parameters ? #todo
+	#return(True) 
+else:
+	print("gene2: " + args.gene2 + " DOES NOT EXIST in paper with pubmedid: " + str(args.pmid))
+
+
 g1_present = re.search(args.gene1, pubtator_response.text)
 g2_present = re.search(args.gene2, pubtator_response.text)
 
