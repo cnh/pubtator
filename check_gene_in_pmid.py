@@ -57,7 +57,7 @@ print(pubtator_response.content)
 print("\n pwd = " + os.getcwd())
 
 #filename = "path/to/desired/location/for/saving/response"
-api_response_file_path = os.getcwd + "/" + str(args.pmid) + "_bioc.xml"
+api_response_file_path = os.getcwd() + "/" + str(args.pmid) + "_bioc.xml"
 
 with open(api_response_file_path, mode='wb') as localfile:     
 	localfile.write(pubtator_response.content)
@@ -86,7 +86,7 @@ if g2e != -1:
 else:
 	print("gene2: " + args.gene2 + " DOES NOT EXIST in paper with pubmedid: " + str(args.pmid))
 
-
+"""
 g1_present = re.search(args.gene1, pubtator_response.text)
 g2_present = re.search(args.gene2, pubtator_response.text)
 
@@ -95,6 +95,6 @@ print(g2_present.group(0))
 #find all occurences of gene1 and gene2
 re.findall(args.gene1, pubtator_response.text)
 re.findall(args.gene2, pubtator_response.text)
-
+"""
 
 
